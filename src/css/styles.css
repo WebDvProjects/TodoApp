@@ -1,5 +1,9 @@
 :root {
-  --color-1: rgb(46, 45, 45);
+  --primary-color: rgb(22 27 34);
+  --secondary-color: rgb(13 17 22);
+  --tertiary-color: rgb(33 38 45);
+
+  color: #fff;
 }
 
 * {
@@ -13,14 +17,14 @@ body {
 .content {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "header header" "sidebar main" "footer footer";
 }
 
 header.header {
   grid-area: header;
-  background-color: var(--color-1);
+  background-color: var(--primary-color);
   color: aliceblue;
 
   padding: 10px;
@@ -39,10 +43,10 @@ header.header {
 
 div.side-bar {
   grid-area: sidebar;
-  background-color: var(--color-1);
+  background-color: var(--primary-color);
   display: flex;
   flex-direction: column;
-  max-width: 200px;
+  width: 200px;
 
   padding: 15px 20px;
 
@@ -145,4 +149,155 @@ button {
   opacity: 0.5;
   /* filter: blur(2px); */
   pointer-events: none;
+}
+
+.projects-list {
+  overflow-y: auto;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.projects-list .project-list-item {
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 10px;
+}
+
+.projects-list .project-list-item:hover,
+.projects-list .project-list-item.active {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+}
+
+.projects-list > :nth-child(n + 2):before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  /* overflow: visible !important; */
+  background-color: #fff;
+}
+
+.main {
+  grid-area: main;
+  background-color: var(--secondary-color);
+  padding: 10px 20px;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  gap: 15px;
+}
+
+.main .project-title {
+  font-size: 1.5rem;
+  padding: 5px 0;
+  white-space: nowrap;
+}
+
+.project-title .project-name {
+  color: aqua;
+}
+
+.project-info :has(+ .project-description) {
+  font-size: 1.3rem;
+}
+
+.project-info .project-description {
+  padding-left: 10px;
+  margin: 5px 0;
+}
+
+.task-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  position: relative;
+}
+
+.task-area::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  border: 1px solid #fff;
+  border-bottom: none;
+}
+
+.task-area-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 1.3rem;
+}
+
+.task-area-header ion-icon {
+  cursor: pointer;
+}
+
+.task-area-header ion-icon:hover {
+  --ionicon-stroke-width: 40px;
+  transform: scale(1.1);
+}
+
+.task-area-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-area-content > :nth-child(n + 2):before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #fff;
+}
+
+.task-area-content > .task {
+  position: relative;
+  padding: 20px 10px;
+  padding-left: 30px;
+  border-radius: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.484);
+  background-color: var(--primary-color);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-area-content > .task::before {
+  content: "";
+  position: absolute;
+  top: auto;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.task-info {
+  flex-grow: 1;
+  padding-left: 10px;
+}
+
+.task-due-date,
+.task-priority {
+  flex-shrink: 0;
 }

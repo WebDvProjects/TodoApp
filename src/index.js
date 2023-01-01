@@ -1,6 +1,6 @@
 // script imports
 import { getHeader } from "./layout/header";
-import { getSidebar, getAddBtn } from "./layout/sidebar";
+import { getSidebar, getAddBtn, addProjectListItem } from "./layout/sidebar";
 import { getMain, displayProject } from "./layout/main-content";
 import { getFooter } from "./layout/footer";
 import { createProject, getProjectLibrary } from "./projects";
@@ -22,19 +22,25 @@ getAddBtn().onclick = (e) => {
 };
 
 function createNewProject(name, description) {
-  createProject(name, description);
+  const newProjectId = createProject(name, description);
+
+  // todo add callback function to display project on main content
+  addProjectListItem(newProjectId, name, () => {
+    // display project on main content
+    selectProject(newProjectId);
+  });
 
   // If there is only one project, select it by default
   if (getProjectLibrary().size() === 1) {
     const projectListItems = document.querySelectorAll(".project-list-item");
-    // select the first project
-    selectProject(projectListItems[0]);
+    // execute the onclick event of the first project list item
+    projectListItems[0].dispatchEvent(new Event("click"));
   }
 }
 
-function selectProject(projectListItem) {
-  projectListItem.classList.add("selected-project");
-  const projectId = projectListItem.getAttribute("data-project-id");
+function selectProject(projectId) {
+  // projectListItem.classList.add("active");
+  // const projectId = projectListItem.getAttribute("data-project-id");
   const project = getProjectLibrary().getProject(projectId);
   displayProject(project);
 }
@@ -122,3 +128,8 @@ content.addEventListener("click", (e) => {
   document.querySelector(".project-add-menu").remove();
   toggleContentDisable();
 });
+
+window.onload = () => {
+  // create default project
+  createNewProject("Default Project", "Default Project Description");
+};

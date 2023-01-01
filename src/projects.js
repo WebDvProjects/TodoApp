@@ -1,29 +1,29 @@
-import { addProjectListItem } from "./layout/sidebar";
-
 const project = (name, id, description) => {
-  const tasks = [];
+  const tasks = {};
+  let taskId = 0;
 
-  function addTask(task) {
-    tasks.push(task);
+  function addTask(description, dueDate, priority) {
+    tasks[taskId] = task(taskId, description, dueDate, priority);
+    return taskId++;
+  }
+
+  function removeTask(id) {
+    delete tasks[id];
   }
 
   function getTasks() {
     return tasks;
   }
 
-  function info() {
-    return description;
-  }
-
-  return { name, id, getTasks, addTask, info };
+  return { name, id, description, getTasks, addTask, removeTask };
 };
 
-const task = (name, id, description, dueDate, priority) => {
+const task = (id, description, dueDate, priority) => {
   function info() {
     return description;
   }
 
-  return { name, id, info, dueDate, priority };
+  return { description, dueDate, priority };
 };
 
 let idCounter = 0;
@@ -36,6 +36,21 @@ const projectLibrary = (() => {
   const getProject = function (id) {
     return projects[id] ?? null;
   };
+
+  // creats a new project task and returns the task id
+  const addProjectTask = function (projectId, task) {
+    return projects[projectId].addTask(task);
+  };
+
+  const getProjectTasks = function (projectId) {
+    return projects[projectId].getTasks();
+  };
+
+  const removeProjectTask = function (projectId, taskId) {
+    const project = projects[projectId];
+    project.removeTask(taskId);
+  };
+
   const removeProject = function (id) {
     delete projects[id];
   };
@@ -52,6 +67,9 @@ const projectLibrary = (() => {
     removeProject,
     getProjects,
     size,
+    addProjectTask,
+    getProjectTasks,
+    removeProjectTask,
   };
 })();
 
@@ -61,7 +79,7 @@ export function createProject(name, description = "") {
   // add project to library
   projectLibrary.addProject(newProject);
 
-  addProjectListItem(idCounter++, name);
+  return idCounter++;
 }
 
 export function getProjectLibrary() {

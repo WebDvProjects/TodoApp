@@ -16,6 +16,7 @@ sideBarTitleArea.append(sideBarTitle, addIcon);
 
 // projects list
 const projectsList = document.createElement("ul");
+projectsList.classList.add("projects-list");
 // sample project list items todo - remove after testing
 
 sideBar.append(sideBarTitleArea, projectsList);
@@ -29,10 +30,24 @@ export function getAddBtn() {
 }
 
 // add project as a list item
-export function addProjectListItem(id, name) {
+export function addProjectListItem(id, name, callBack = null) {
   const projectListItem = document.createElement("li");
   projectListItem.classList.add("project-list-item");
   projectListItem.setAttribute("data-project-id", id);
   projectListItem.textContent = name;
+
+  projectListItem.onclick = (e) => {
+    e.stopPropagation();
+    const projectListItems = document.querySelectorAll(".project-list-item");
+    projectListItems.forEach((item) => {
+      item.classList.remove("active");
+    });
+    projectListItem.classList.add("active");
+    // if callback function is given
+    if (callBack) {
+      callBack();
+    }
+  };
+
   projectsList.append(projectListItem);
 }
