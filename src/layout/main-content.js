@@ -24,16 +24,10 @@ taskAreaContent.classList.add("task-area-content");
 // task area header
 const taskAreaTitle = document.createElement("div");
 taskAreaTitle.textContent = "Tasks:";
-const addNewTaskBtn = document.createElement("ion-icon");
+export const addNewTaskBtn = document.createElement("ion-icon");
 addNewTaskBtn.setAttribute("name", "add-circle-outline");
 addNewTaskBtn.classList.add("add-new-task-btn");
-addNewTaskBtn.addEventListener("click", () => {
-  // open popul menu
-  // not implemented
 
-  // add new task
-  addNewTask("No description", "No due date", "No priority");
-});
 taskAreaHeader.append(taskAreaTitle, addNewTaskBtn);
 
 // task area content
@@ -47,18 +41,22 @@ export function getMain() {
 export function displayProject(project) {
   clearMain();
   currentProjectId = project.id;
+
   const projectTitlePrefix = document.createElement("span");
   projectTitlePrefix.textContent = "Project: ";
   projectTitlePrefix.classList.add("project-title-prefix");
   const projectName = document.createElement("span");
   projectName.classList.add("project-name");
   projectName.textContent = project.name;
-  projectTitle.append(projectTitlePrefix, projectName);
+  const projectEditIcon = document.createElement("ion-icon");
+  projectEditIcon.setAttribute("name", "create-outline");
+  projectTitle.append(projectTitlePrefix, projectName, projectEditIcon);
 
   const projectDescription = document.createElement("p");
   projectDescription.classList.add("project-description");
   projectDescription.textContent =
     project.description === "" ? "No description" : project.description;
+
   projectInfo.append(projectInfoTitle, projectDescription);
 
   displayTasks();
@@ -76,21 +74,45 @@ function displayTasks() {
   } else {
     for (const taskId in Object.values(tasks)) {
       console.log(tasks[taskId]);
-      let description, dueDate, priority;
-      ({ description, dueDate, priority } = tasks[taskId]);
+      let name, description, dueDate, priority;
+      ({ name, dueDate, priority } = tasks[taskId]);
       const task = document.createElement("div");
       task.classList.add("task");
+      const taskStatus = document.createElement("div");
+      taskStatus.classList.add("task-status");
+      taskStatus.setAttribute("data-status", "incomplete");
+      taskStatus.onclick = () => {
+        taskStatus.setAttribute(
+          "data-status",
+          taskStatus.getAttribute("data-status") === "incomplete"
+            ? "complete"
+            : "incomplete"
+        );
+
+        // update task status
+        getProjectLibrary()
+          .getProject(currentProjectId)
+          .getTask(taskId)
+          .toggleStatus();
+      };
       const taskInfo = document.createElement("div");
       taskInfo.classList.add("task-info");
-      taskInfo.textContent =
-        description === "" ? "No description" : description;
+      taskInfo.textContent = !!!name ? "No Name" : name;
       const taskDueDate = document.createElement("div");
       taskDueDate.classList.add("task-due-date");
-      taskDueDate.textContent = dueDate === "" ? "No due date" : dueDate;
+      taskDueDate.textContent = !!!dueDate ? "No due date" : dueDate;
       const taskPriority = document.createElement("div");
       taskPriority.classList.add("task-priority");
-      taskPriority.textContent = priority === "" ? "No priority" : priority;
-      task.append(taskInfo, taskDueDate, taskPriority);
+      taskPriority.setAttribute("data-priority", priority);
+      const taskEditIcon = document.createElement("ion-icon");
+      taskEditIcon.setAttribute("name", "create-outline");
+      task.append(
+        taskStatus,
+        taskInfo,
+        taskDueDate,
+        taskPriority,
+        taskEditIcon
+      );
       taskAreaContent.append(task);
     }
   }
@@ -99,10 +121,12 @@ function displayTasks() {
   taskArea.append(taskAreaHeader, taskAreaContent);
 }
 
-function addNewTask(description, dueDate, priority) {
+function sortTasks(filter) {}
+
+export function addNewTask(name, description, dueDate, priority) {
   getProjectLibrary()
     .getProject(currentProjectId)
-    .addTask(description, dueDate, priority);
+    .addTask(name, description, dueDate, priority);
   // update task area
   displayTasks();
 }
@@ -113,3 +137,17 @@ export function clearMain() {
   projectInfo.innerHTML = "";
   taskArea.innerHTML = "";
 }
+
+function showEditMenu(type) {
+  switch (type) {
+    case "project":
+      showProjectEditMenu();
+      break;
+    case "task":
+      showTaskEditMenu();
+      break;
+  }
+}
+
+function showProjectEditMenu() {}
+function showTaskEditMenu() {}

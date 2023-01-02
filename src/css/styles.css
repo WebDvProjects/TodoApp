@@ -70,10 +70,11 @@ div.side-bar {
   --ionicon-stroke-width: 40px;
 }
 
-.project-add-menu {
+.project-add-menu,
+.task-add-menu {
   --menu-width: 40vmin;
   position: absolute;
-  top: 20%;
+  top: 30%;
   left: 50%;
 
   width: clamp(300px, var(--menu-width), 500px);
@@ -93,7 +94,8 @@ div.side-bar {
   overflow: hidden;
 }
 
-.project-add-menu .project-add-menu-close-btn {
+.project-add-menu-close-btn,
+.task-add-menu-close-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -103,30 +105,36 @@ div.side-bar {
   color: #fff;
   cursor: pointer;
 }
-.project-add-menu .project-add-menu-close-btn:hover {
+.project-add-menu-close-btn:hover,
+.task-add-menu-close-btn:hover {
   --ionicon-stroke-width: 40px;
   font-size: 1.1em;
 }
 
 .project-add-menu input,
-.project-add-menu button {
+.project-add-menu button,
+.task-add-menu input,
+.task-add-menu button {
   width: 100%;
   border-radius: 5px;
   padding: 10px;
 }
 
-.project-add-menu button {
+.project-add-menu button,
+.task-add-menu button {
   margin-top: 20px;
   background-color: #000;
   color: #fff;
 
   position: relative;
 }
-.project-add-menu button:hover {
+.project-add-menu button:hover,
+.task-add-menu button:hover {
   background-color: rgba(0, 0, 0, 0.888);
 }
 
-.project-add-menu button span {
+.project-add-menu button span,
+.task-add-menu button span {
   position: absolute;
   color: red;
   top: -25px;
@@ -143,6 +151,13 @@ button {
 
 button {
   cursor: pointer;
+}
+
+select {
+  /* appearance: none; */
+  outline: none;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .disabled {
@@ -199,6 +214,11 @@ button {
   font-size: 1.5rem;
   padding: 5px 0;
   white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* justify-content: space-between; */
 }
 
 .project-title .project-name {
@@ -269,8 +289,8 @@ button {
 
 .task-area-content > .task {
   position: relative;
-  padding: 20px 10px;
-  padding-left: 30px;
+  padding: 20px 20px;
+  /* padding-left: 30px; */
   border-radius: 10px 20px;
   border: 1px solid rgba(255, 255, 255, 0.484);
   background-color: var(--primary-color);
@@ -280,24 +300,56 @@ button {
   gap: 10px;
 }
 
-.task-area-content > .task::before {
-  content: "";
-  position: absolute;
-  top: auto;
-  left: 10px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  cursor: pointer;
-  background-color: #fff;
-}
-
 .task-info {
   flex-grow: 1;
-  padding-left: 10px;
 }
 
 .task-due-date,
 .task-priority {
   flex-shrink: 0;
+}
+
+.task-status {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #ccc;
+  position: relative;
+}
+
+.task-status[data-status="complete"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+}
+
+.task-priority {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.task-priority[data-priority="high"] {
+  background-color: red;
+}
+
+.task-priority[data-priority="medium"] {
+  background-color: orange;
+}
+
+.task-priority[data-priority="low"] {
+  background-color: green;
+}
+
+ion-icon[name="create-outline"] {
+  cursor: pointer;
+  transform: translate(0, -40%);
+  font-size: 1rem;
 }

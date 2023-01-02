@@ -2,9 +2,13 @@ const project = (name, id, description) => {
   const tasks = {};
   let taskId = 0;
 
-  function addTask(description, dueDate, priority) {
-    tasks[taskId] = task(taskId, description, dueDate, priority);
+  function addTask(name, description, dueDate, priority) {
+    tasks[taskId] = task(taskId, name, description, dueDate, priority);
     return taskId++;
+  }
+
+  function getTask(taskID) {
+    return tasks[taskID];
   }
 
   function removeTask(id) {
@@ -15,15 +19,42 @@ const project = (name, id, description) => {
     return tasks;
   }
 
-  return { name, id, description, getTasks, addTask, removeTask };
+  function status() {
+    const tasksKeys = Object.keys(tasks);
+    const completed = tasksKeys.reduce(
+      (state, task) => state && task.isComplete(),
+      true
+    );
+    return completed ? "done" : "incomplete";
+  }
+
+  return {
+    name,
+    id,
+    description,
+    getTasks,
+    addTask,
+    removeTask,
+    status,
+    getTask,
+  };
 };
 
-const task = (id, description, dueDate, priority) => {
+const task = (id, name, description, dueDate, priority, status = false) => {
+  let completed = status;
   function info() {
     return description;
   }
 
-  return { description, dueDate, priority };
+  function toggleStatus() {
+    completed = !completed;
+  }
+
+  function isComplete() {
+    return completed;
+  }
+
+  return { name, description, dueDate, priority, isComplete, toggleStatus };
 };
 
 let idCounter = 0;
