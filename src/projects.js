@@ -1,11 +1,18 @@
-const project = (name, id, description) => {
-  const tasks = {};
+const project = (name, id, description, tasks = {}) => {
+  var tasks = tasks;
   let taskId = 0;
+  let projectName = name;
+  let projectDescription = description;
 
   function addTask(name, description, dueDate, priority) {
     tasks[taskId] = task(taskId, name, description, dueDate, priority);
     return taskId++;
   }
+
+  // function update(name, description) {
+  //   projectName = name;
+  //   projectDescription = description;
+  // }
 
   function getTask(taskID) {
     return tasks[taskID];
@@ -29,14 +36,15 @@ const project = (name, id, description) => {
   }
 
   return {
-    name,
+    name: projectName,
     id,
-    description,
+    description: projectDescription,
     getTasks,
     addTask,
     removeTask,
     status,
     getTask,
+    // update,
   };
 };
 
@@ -59,13 +67,23 @@ const task = (id, name, description, dueDate, priority, status = false) => {
 
 let idCounter = 0;
 
-const projectLibrary = (() => {
+export const projectLibrary = (() => {
   const projects = {};
   const addProject = function (project) {
     projects[project.id] = project;
   };
   const getProject = function (id) {
     return projects[id] ?? null;
+  };
+
+  const updateProject = function (id, name, description, tasks) {
+    console.log("before", projects[id]);
+    projects[id] = project(name, id, description, projects[id].getTasks());
+    console.log("after", projects[id]);
+  };
+
+  const deleteProject = function (id) {
+    delete projects[id];
   };
 
   // creats a new project task and returns the task id
@@ -101,6 +119,8 @@ const projectLibrary = (() => {
     addProjectTask,
     getProjectTasks,
     removeProjectTask,
+    updateProject,
+    deleteProject,
   };
 })();
 

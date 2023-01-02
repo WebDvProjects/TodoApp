@@ -71,7 +71,8 @@ div.side-bar {
 }
 
 .project-add-menu,
-.task-add-menu {
+.task-add-menu,
+.edit-menu {
   --menu-width: 40vmin;
   position: absolute;
   top: 30%;
@@ -95,7 +96,8 @@ div.side-bar {
 }
 
 .project-add-menu-close-btn,
-.task-add-menu-close-btn {
+.task-add-menu-close-btn,
+.edit-menu-close-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -106,7 +108,8 @@ div.side-bar {
   cursor: pointer;
 }
 .project-add-menu-close-btn:hover,
-.task-add-menu-close-btn:hover {
+.task-add-menu-close-btn:hover,
+.edit-menu-close-btn:hover {
   --ionicon-stroke-width: 40px;
   font-size: 1.1em;
 }
@@ -153,7 +156,8 @@ button {
   cursor: pointer;
 }
 
-select {
+select,
+textarea {
   /* appearance: none; */
   outline: none;
   padding: 10px;
@@ -352,4 +356,104 @@ ion-icon[name="create-outline"] {
   cursor: pointer;
   transform: translate(0, -40%);
   font-size: 1rem;
+}
+
+.edit-menu {
+  --menu-width: 70vmin;
+}
+
+.edit-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-menu label {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto auto;
+  /* justify-content: space-between; */
+  /* gap: 50px; */
+}
+
+.edit-menu label :is(input, textarea) {
+  /* flex-grow: 1; */
+  /* width: 50%; */
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.mark-all-done {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.mark-all-done-btn {
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  /* border: 1px solid #ccc; */
+  background-color: #ccc;
+  /* color: #fff; */
+  cursor: pointer;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+
+  transition: background 0.2s ease;
+}
+
+.mark-all-done-btn::before {
+  background-color: #fff;
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.mark-all-done-btn[checked="true"] {
+  /* justify-content: end; */
+  background-color: var(--primary-color);
+  /* transform: translateX(20px); */
+}
+
+.mark-all-done-btn[checked="true"]::before {
+  transform: translateX(20px);
+}
+
+.save-btn {
+  width: 50%;
+  align-self: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: rgb(13, 171, 13);
+  color: #fff;
+}
+
+input:invalid {
+  border: 1px solid red !important;
+}
+
+label:has(input:invalid) {
+  position: relative;
+}
+
+label:has(input:invalid)::after {
+  content: "Invalid";
+  position: absolute;
+  top: 100%;
+  left: 20%;
+  color: red;
+  font-size: 0.7rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

@@ -109,8 +109,8 @@ const addProjectMenu = (() => {
   function selectProject(projectId) {
     // projectListItem.classList.add("active");
     // const projectId = projectListItem.getAttribute("data-project-id");
-    const project = getProjectLibrary().getProject(projectId);
-    displayProject(project);
+    // const project = getProjectLibrary().getProject(projectId);
+    displayProject(projectId);
   }
 
   return { displayProjectAddMenu, createNewProject };
@@ -203,7 +203,7 @@ const addTaskMenu = (() => {
 
 /* EVENT LISTENERS */
 
-content.addEventListener("click", (e) => {
+content.addEventListener("mouseup", (e) => {
   // check if project add menu is open
   if (!!document.querySelector(".project-add-menu")) {
     // check if clicked outside of project add menu
@@ -218,6 +218,15 @@ content.addEventListener("click", (e) => {
     // check if clicked outside of task add menu
     if (!document.querySelector(".task-add-menu").contains(e.target)) {
       document.querySelector(".task-add-menu").remove();
+      toggleContentDisable();
+    }
+  }
+
+  // check if edit menu is open
+  if (!!document.querySelector(".edit-menu")) {
+    // check if clicked outside of edit menu
+    if (!document.querySelector(".edit-menu").contains(e.target)) {
+      document.querySelector(".edit-menu").remove();
       toggleContentDisable();
     }
   }
