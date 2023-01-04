@@ -30,6 +30,8 @@ header.header {
   padding: 10px;
 
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   z-index: 3;
   position: relative;
@@ -520,10 +522,21 @@ button:disabled {
     gap: 50px;
     /* justify-self: center; */
   }
+
+  .menu-icon {
+    display: none;
+  }
 }
 
 @media (width >=992) {
 }
 
 @media (width >= 450) {
+}
+
+svg#svg-menu-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  fill: #fff;
 }
