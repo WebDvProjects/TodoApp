@@ -30,10 +30,16 @@ const project = (name, id, description, tasks = {}) => {
     delete tasks[id];
   }
 
+  function clearAllTasks() {
+    tasks = {};
+    taskId = 0;
+  }
+
   function getTasks() {
     return tasks;
   }
 
+  // returns true if all tasks are complete
   function status() {
     const tasksKeys = Object.keys(tasks);
     const completed = tasksKeys.reduce(
@@ -42,6 +48,12 @@ const project = (name, id, description, tasks = {}) => {
     );
     return completed ? "done" : "incomplete";
   }
+
+  const markAllTasksDone = function () {
+    for (const task of Object.values(tasks)) {
+      task.toggleStatus();
+    }
+  };
 
   return {
     name: projectName,
@@ -53,7 +65,8 @@ const project = (name, id, description, tasks = {}) => {
     status,
     getTask,
     toggleTaskStatus,
-    copyTasks,
+    clearAllTasks,
+    markAllTasksDone,
   };
 };
 
@@ -95,7 +108,8 @@ export const projectLibrary = (() => {
     name,
     description,
     dueDate,
-    priority
+    priority,
+    status
   ) {
     projects[[projectId]].add(name, description, dueDate, priority, taskId);
   };
@@ -109,8 +123,8 @@ export const projectLibrary = (() => {
   };
 
   // creats a new project task and returns the task id
-  const addProjectTask = function (projectId, task) {
-    return projects[projectId].addTask(task);
+  const addProjectTask = function (projectId, ...taskDetails) {
+    return projects[projectId].addTask(...taskDetails);
   };
 
   const getProjectTasks = function (projectId) {
@@ -128,6 +142,14 @@ export const projectLibrary = (() => {
 
   const removeTask = function (projectId, taskId) {
     projects[projectId].removeTask(taskId);
+  };
+
+  const clearAllProjectTasks = function (projectId) {
+    projects[projectId].clearAllTasks();
+  };
+
+  const markAllTasksDone = function (projectId) {
+    projects[projectId].markAllTasksDone();
   };
 
   const getProjects = function () {
@@ -151,6 +173,8 @@ export const projectLibrary = (() => {
     updateProjectTask,
     toggleTaskStatus,
     removeTask,
+    clearAllProjectTasks,
+    markAllTasksDone,
   };
 })();
 

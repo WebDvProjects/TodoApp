@@ -25,11 +25,20 @@ taskAreaContent.classList.add("task-area-content");
 // task area header
 const taskAreaTitle = document.createElement("div");
 taskAreaTitle.textContent = "Tasks:";
+
+const clearAllBtn = document.createElement("button");
+clearAllBtn.classList.add("clear-all-btn");
+clearAllBtn.textContent = "Clear All";
+clearAllBtn.onclick = () => {
+  projectLibrary.clearAllProjectTasks(currentProjectId);
+  displayTasks();
+};
+
 export const addNewTaskBtn = document.createElement("ion-icon");
 addNewTaskBtn.setAttribute("name", "add-circle-outline");
 addNewTaskBtn.classList.add("add-new-task-btn");
 
-taskAreaHeader.append(taskAreaTitle, addNewTaskBtn);
+taskAreaHeader.append(taskAreaTitle, clearAllBtn, addNewTaskBtn);
 
 // task area content
 const taskContentWrapper = document.createElement("div");
@@ -91,14 +100,15 @@ export function displayProject(projectId) {
 }
 
 function displayTasks() {
-  const tasks = getProjectLibrary().getProjectTasks(currentProjectId);
+  const tasks = projectLibrary.getProjectTasks(currentProjectId);
+
   taskContentWrapper.innerHTML = "";
   if (Object.keys(tasks).length === 0) {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks";
     taskContentWrapper.append(noTasks);
   } else {
-    for (const taskId in Object.values(tasks)) {
+    for (const taskId of Object.keys(tasks)) {
       const task = tasks[taskId];
       const taskElement = document.createElement("div");
       taskElement.classList.add("task");
@@ -135,12 +145,21 @@ function displayTasks() {
         // toggleVeil();
         e.stopPropagation();
       };
+      const taskDeleteIcon = document.createElement("ion-icon");
+      taskDeleteIcon.setAttribute("name", "trash-outline");
+      taskDeleteIcon.onclick = (e) => {
+        projectLibrary.removeProjectTask(currentProjectId, taskId);
+        displayTasks();
+        e.stopPropagation();
+      };
+
       taskElement.append(
         taskStatus,
         taskInfo,
         taskDueDate,
         taskPriority,
-        taskEditIcon
+        taskEditIcon,
+        taskDeleteIcon
       );
 
       taskContentWrapper.append(taskElement);
@@ -154,9 +173,13 @@ function displayTasks() {
 function sortTasks(filter) {}
 
 export function addNewTask(name, description, dueDate, priority) {
-  getProjectLibrary()
-    .getProject(currentProjectId)
-    .addTask(name, description, dueDate, priority);
+  projectLibrary.addProjectTask(
+    currentProjectId,
+    name,
+    description,
+    dueDate,
+    priority
+  );
   // update task area
   displayTasks();
 }
@@ -221,7 +244,7 @@ function showEditMenu(type, taskId) {
     markText.textContent = "Mark all tasks as done";
     const markAllDoneBtn = document.createElement("div");
     markAllDoneBtn.classList.add("mark-all-done-btn");
-    markAllDoneBtn.setAttribute("checked", "true");
+    markAllDoneBtn.setAttribute("checked", "false");
     markAllDoneBtn.onclick = () => {
       markAllDoneBtn.setAttribute(
         "checked",
@@ -246,10 +269,18 @@ function showEditMenu(type, taskId) {
   };
 
   saveBtn.onclick = () => {
+    // General Validation
+    if (!validate(name)) {
+      return;
+    }
+
     if (type === "Project") {
-      // Validation
-      if (!validate(name)) {
-        return;
+      // check if mark all done is checked
+      if (
+        document.querySelector(".mark-all-done-btn").getAttribute("checked") ===
+        "true"
+      ) {
+        projectLibrary.markAllTasksDone(currentProjectId);
       }
       // update project in the library
       projectLibrary.updateProject(

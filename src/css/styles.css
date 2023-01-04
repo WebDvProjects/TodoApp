@@ -430,6 +430,7 @@ textarea {
   border-radius: 10px;
   /* border: 1px solid #ccc; */
   background-color: #ccc;
+  box-shadow: inset 0 0 0.75rem #000;
   /* color: #fff; */
   cursor: pointer;
 
@@ -452,7 +453,8 @@ textarea {
 
 .mark-all-done-btn[checked="true"] {
   /* justify-content: end; */
-  background-color: var(--primary-color);
+  background-color: aqua;
+  box-shadow: inset 0 0 0.75rem #000;
   /* transform: translateX(20px); */
 }
 
