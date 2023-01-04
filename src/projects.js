@@ -1,18 +1,26 @@
 const project = (name, id, description, tasks = {}) => {
   var tasks = tasks;
-  let taskId = 0;
+  /* Initial starting id will be -1 + 1 = 0 
+   ...[] returns -Infinity so -1 will always be greater
+   Otheriwse if the project is being updated/assigned with a list of tasks
+   then increment the last id element by 1 */
+  let taskId = Math.max(-1, ...Object.keys(tasks)) + 1;
   let projectName = name;
   let projectDescription = description;
 
-  function addTask(name, description, dueDate, priority) {
-    tasks[taskId] = task(taskId, name, description, dueDate, priority);
-    return taskId++;
+  // add/update task
+  function addTask(name, description, dueDate, priority, task_id = taskId++) {
+    tasks[task_id] = task(taskId, name, description, dueDate, priority);
+    return task_id;
   }
 
-  // function update(name, description) {
-  //   projectName = name;
-  //   projectDescription = description;
-  // }
+  function copyTasks(taskList) {
+    tasks = taskList;
+  }
+
+  function toggleTaskStatus(taskId) {
+    tasks[taskId].toggleStatus();
+  }
 
   function getTask(taskID) {
     return tasks[taskID];
@@ -44,7 +52,8 @@ const project = (name, id, description, tasks = {}) => {
     removeTask,
     status,
     getTask,
-    // update,
+    toggleTaskStatus,
+    copyTasks,
   };
 };
 
@@ -76,10 +85,23 @@ export const projectLibrary = (() => {
     return projects[id] ?? null;
   };
 
-  const updateProject = function (id, name, description, tasks) {
-    console.log("before", projects[id]);
+  const updateProject = function (id, name, description) {
     projects[id] = project(name, id, description, projects[id].getTasks());
-    console.log("after", projects[id]);
+  };
+
+  const updateProjectTask = function (
+    projectId,
+    taskId,
+    name,
+    description,
+    dueDate,
+    priority
+  ) {
+    projects[[projectId]].add(name, description, dueDate, priority, taskId);
+  };
+
+  const toggleTaskStatus = function (projectId, taskId) {
+    projects[projectId].toggleTaskStatus(taskId);
   };
 
   const deleteProject = function (id) {
@@ -103,6 +125,11 @@ export const projectLibrary = (() => {
   const removeProject = function (id) {
     delete projects[id];
   };
+
+  const removeTask = function (projectId, taskId) {
+    projects[projectId].removeTask(taskId);
+  };
+
   const getProjects = function () {
     return projects;
   };
@@ -121,6 +148,9 @@ export const projectLibrary = (() => {
     removeProjectTask,
     updateProject,
     deleteProject,
+    updateProjectTask,
+    toggleTaskStatus,
+    removeTask,
   };
 })();
 

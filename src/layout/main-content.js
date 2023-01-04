@@ -32,6 +32,9 @@ addNewTaskBtn.classList.add("add-new-task-btn");
 taskAreaHeader.append(taskAreaTitle, addNewTaskBtn);
 
 // task area content
+const taskContentWrapper = document.createElement("div");
+taskContentWrapper.classList.add("task-content-wrapper");
+taskAreaContent.append(taskContentWrapper);
 
 let currentProjectId = null; // current project id
 
@@ -89,21 +92,22 @@ export function displayProject(projectId) {
 
 function displayTasks() {
   const tasks = getProjectLibrary().getProjectTasks(currentProjectId);
-  taskAreaContent.innerHTML = "";
+  taskContentWrapper.innerHTML = "";
   if (Object.keys(tasks).length === 0) {
     const noTasks = document.createElement("p");
     noTasks.textContent = "No tasks";
-    taskAreaContent.append(noTasks);
+    taskContentWrapper.append(noTasks);
   } else {
     for (const taskId in Object.values(tasks)) {
-      console.log(tasks[taskId]);
-      let name, description, dueDate, priority;
-      ({ name, dueDate, priority } = tasks[taskId]);
-      const task = document.createElement("div");
-      task.classList.add("task");
+      const task = tasks[taskId];
+      const taskElement = document.createElement("div");
+      taskElement.classList.add("task");
       const taskStatus = document.createElement("div");
       taskStatus.classList.add("task-status");
-      taskStatus.setAttribute("data-status", "incomplete");
+      taskStatus.setAttribute(
+        "data-status",
+        task.isComplete() ? "complete" : "incomplete"
+      );
       taskStatus.onclick = () => {
         taskStatus.setAttribute(
           "data-status",
@@ -113,20 +117,17 @@ function displayTasks() {
         );
 
         // update task status
-        getProjectLibrary()
-          .getProject(currentProjectId)
-          .getTask(taskId)
-          .toggleStatus();
+        projectLibrary.toggleTaskStatus(currentProjectId, taskId);
       };
       const taskInfo = document.createElement("div");
       taskInfo.classList.add("task-info");
-      taskInfo.textContent = !!!name ? "No Name" : name;
+      taskInfo.textContent = !!!task.name ? "No Name" : task.name;
       const taskDueDate = document.createElement("div");
       taskDueDate.classList.add("task-due-date");
-      taskDueDate.textContent = !!!dueDate ? "No due date" : dueDate;
+      taskDueDate.textContent = !!!task.dueDate ? "No due date" : task.dueDate;
       const taskPriority = document.createElement("div");
       taskPriority.classList.add("task-priority");
-      taskPriority.setAttribute("data-priority", priority);
+      taskPriority.setAttribute("data-priority", task.priority);
       const taskEditIcon = document.createElement("ion-icon");
       taskEditIcon.setAttribute("name", "create-outline");
       taskEditIcon.onclick = (e) => {
@@ -134,14 +135,15 @@ function displayTasks() {
         // toggleVeil();
         e.stopPropagation();
       };
-      task.append(
+      taskElement.append(
         taskStatus,
         taskInfo,
         taskDueDate,
         taskPriority,
         taskEditIcon
       );
-      taskAreaContent.append(task);
+
+      taskContentWrapper.append(taskElement);
     }
   }
   // clear task area and re-append
