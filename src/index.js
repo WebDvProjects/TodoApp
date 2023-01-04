@@ -8,7 +8,7 @@ import {
   addNewTaskBtn,
 } from "./layout/main-content";
 import { getFooter } from "./layout/footer";
-import { createProject, getProjectLibrary } from "./projects";
+import { createProject, projectLibrary } from "./projects";
 import { validate, toggleVeil } from "./intermediary";
 
 // style imports
@@ -99,7 +99,7 @@ const addProjectMenu = (() => {
     });
 
     // If there is only one project, select it by default
-    if (getProjectLibrary().size() === 1) {
+    if (projectLibrary.size() === 1) {
       const projectListItems = document.querySelectorAll(".project-list-item");
       // execute the onclick event of the first project list item
       projectListItems[0].dispatchEvent(new Event("click"));
@@ -199,43 +199,13 @@ const addTaskMenu = (() => {
   return { displayTaskAddMenu };
 })();
 
-/* HELPER FUNCTIONS */
-
-/* EVENT LISTENERS */
-
-// content.addEventListener("mouseup", (e) => {
-//   // check if project add menu is open
-//   if (!!document.querySelector(".project-add-menu")) {
-//     // check if clicked outside of project add menu
-//     if (!document.querySelector(".project-add-menu").contains(e.target)) {
-//       document.querySelector(".project-add-menu").remove();
-//       //toggleVeil();
-//     }
-//   }
-
-//   // check if task add menu is open
-//   if (!!document.querySelector(".task-add-menu")) {
-//     // check if clicked outside of task add menu
-//     if (!document.querySelector(".task-add-menu").contains(e.target)) {
-//       document.querySelector(".task-add-menu").remove();
-//       ////toggleVeil();
-//     }
-//   }
-
-//   // check if edit menu is open
-//   if (!!document.querySelector(".edit-menu")) {
-//     // check if clicked outside of edit menu
-//     if (!document.querySelector(".edit-menu").contains(e.target)) {
-//       document.querySelector(".edit-menu").remove();
-//       ////toggleVeil();
-//     }
-//   }
-// });
-
 window.onload = () => {
   // create default project
   addProjectMenu.createNewProject(
     "Default Project",
     "Default Project Description"
   );
+  addNewTask("Task 1", "Default Task Description", "2021-01-01", "low");
+  addNewTask("Task 2", "Default Task Description", "2021-01-01", "medium");
+  addNewTask("Task 3", "Default Task Description", "2021-01-01", "high");
 };

@@ -1,5 +1,6 @@
 import { getProjectLibrary, projectLibrary } from "../projects";
 import { validate, toggleVeil } from "../intermediary";
+// import { projectsList } from "./sidebar";
 
 const main = document.createElement("main");
 main.classList.add("main");
@@ -56,6 +57,9 @@ export function displayProject(projectId) {
   const project = getProjectLibrary().getProject(projectId);
   if (!!!project) return;
   currentProjectId = project.id;
+  // update project name in sidebar list
+  document.querySelector(`[data-project-id="${project.id}"]`).textContent =
+    project.name;
 
   const projectTitlePrefix = document.createElement("span");
   projectTitlePrefix.textContent = "Project: ";
