@@ -1,5 +1,5 @@
 import { getProjectLibrary, projectLibrary } from "../projects";
-import { validate, toggleContentDisable } from "../intermediary";
+import { validate, toggleVeil } from "../intermediary";
 
 const main = document.createElement("main");
 main.classList.add("main");
@@ -55,7 +55,7 @@ export function displayProject(projectId) {
   projectEditIcon.setAttribute("name", "create-outline");
   projectEditIcon.onclick = (e) => {
     showEditMenu("project");
-    toggleContentDisable();
+    // toggleVeil();
     e.stopPropagation();
   };
   const deleteProjectIcon = document.createElement("ion-icon");
@@ -131,7 +131,7 @@ function displayTasks() {
       taskEditIcon.setAttribute("name", "create-outline");
       taskEditIcon.onclick = (e) => {
         showEditMenu("task", taskId);
-        toggleContentDisable();
+        // toggleVeil();
         e.stopPropagation();
       };
       task.append(
@@ -176,7 +176,7 @@ function showEditMenu(type, taskId) {
   const task = !!taskId ? project.getTask(taskId) : null;
 
   const editMenu = document.createElement("div");
-  editMenu.classList.add("edit-menu");
+  editMenu.classList.add("edit-menu", "popup");
 
   const editMenuTitle = document.createElement("div");
   editMenuTitle.classList.add("edit-menu-title");
@@ -240,7 +240,7 @@ function showEditMenu(type, taskId) {
   editMenuCloseBtn.classList.add("edit-menu-close-btn");
   editMenuCloseBtn.onclick = () => {
     editMenu.remove();
-    toggleContentDisable();
+    // toggleVeil();
   };
 
   saveBtn.onclick = () => {
@@ -264,7 +264,7 @@ function showEditMenu(type, taskId) {
       displayTasks();
     }
     editMenu.remove();
-    toggleContentDisable();
+    // toggleVeil();
   };
 
   editMenu.append(editMenuTitle, editMenuContent, editMenuCloseBtn, saveBtn);

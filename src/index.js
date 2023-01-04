@@ -9,7 +9,7 @@ import {
 } from "./layout/main-content";
 import { getFooter } from "./layout/footer";
 import { createProject, getProjectLibrary } from "./projects";
-import { validate, toggleContentDisable } from "./intermediary";
+import { validate, toggleVeil } from "./intermediary";
 
 // style imports
 import "./css/styles.css";
@@ -36,7 +36,7 @@ addNewTaskBtn.onclick = (e) => {
 const addProjectMenu = (() => {
   function displayProjectAddMenu() {
     const projectAddMenu = document.createElement("div");
-    projectAddMenu.classList.add("project-add-menu");
+    projectAddMenu.classList.add("project-add-menu", "popup");
 
     const projectAddMenuTitle = document.createElement("p");
     projectAddMenuTitle.textContent = "New Project";
@@ -46,7 +46,7 @@ const addProjectMenu = (() => {
     projectAddMenuCloseBtn.classList.add("project-add-menu-close-btn");
     projectAddMenuCloseBtn.onclick = () => {
       projectAddMenu.remove();
-      toggleContentDisable();
+      //toggleVeil();
     };
 
     const projectName = document.createElement("input");
@@ -73,7 +73,7 @@ const addProjectMenu = (() => {
       // create and add project to library
       createNewProject(projectName.value, projectDescription.value);
       projectAddMenu.remove();
-      toggleContentDisable();
+      //toggleVeil();
     };
 
     projectAddMenu.append(
@@ -86,7 +86,7 @@ const addProjectMenu = (() => {
 
     content.append(projectAddMenu);
 
-    toggleContentDisable();
+    //toggleVeil();
   }
 
   function createNewProject(name, description) {
@@ -119,7 +119,7 @@ const addProjectMenu = (() => {
 const addTaskMenu = (() => {
   function displayTaskAddMenu() {
     const taskAddMenu = document.createElement("div");
-    taskAddMenu.classList.add("task-add-menu");
+    taskAddMenu.classList.add("task-add-menu", "popup");
 
     const taskAddMenuTitle = document.createElement("p");
     taskAddMenuTitle.textContent = "New Task";
@@ -129,7 +129,7 @@ const addTaskMenu = (() => {
     taskAddMenuCloseBtn.classList.add("task-add-menu-close-btn");
     taskAddMenuCloseBtn.onclick = () => {
       taskAddMenu.remove();
-      toggleContentDisable();
+      //toggleVeil();
     };
 
     const taskName = document.createElement("input");
@@ -179,7 +179,7 @@ const addTaskMenu = (() => {
         taskPriority.value
       );
       taskAddMenu.remove();
-      toggleContentDisable();
+      //toggleVeil();
     };
 
     taskAddMenu.append(
@@ -194,7 +194,7 @@ const addTaskMenu = (() => {
 
     content.append(taskAddMenu);
 
-    toggleContentDisable();
+    //toggleVeil();
   }
   return { displayTaskAddMenu };
 })();
@@ -203,34 +203,34 @@ const addTaskMenu = (() => {
 
 /* EVENT LISTENERS */
 
-content.addEventListener("mouseup", (e) => {
-  // check if project add menu is open
-  if (!!document.querySelector(".project-add-menu")) {
-    // check if clicked outside of project add menu
-    if (!document.querySelector(".project-add-menu").contains(e.target)) {
-      document.querySelector(".project-add-menu").remove();
-      toggleContentDisable();
-    }
-  }
+// content.addEventListener("mouseup", (e) => {
+//   // check if project add menu is open
+//   if (!!document.querySelector(".project-add-menu")) {
+//     // check if clicked outside of project add menu
+//     if (!document.querySelector(".project-add-menu").contains(e.target)) {
+//       document.querySelector(".project-add-menu").remove();
+//       //toggleVeil();
+//     }
+//   }
 
-  // check if task add menu is open
-  if (!!document.querySelector(".task-add-menu")) {
-    // check if clicked outside of task add menu
-    if (!document.querySelector(".task-add-menu").contains(e.target)) {
-      document.querySelector(".task-add-menu").remove();
-      toggleContentDisable();
-    }
-  }
+//   // check if task add menu is open
+//   if (!!document.querySelector(".task-add-menu")) {
+//     // check if clicked outside of task add menu
+//     if (!document.querySelector(".task-add-menu").contains(e.target)) {
+//       document.querySelector(".task-add-menu").remove();
+//       ////toggleVeil();
+//     }
+//   }
 
-  // check if edit menu is open
-  if (!!document.querySelector(".edit-menu")) {
-    // check if clicked outside of edit menu
-    if (!document.querySelector(".edit-menu").contains(e.target)) {
-      document.querySelector(".edit-menu").remove();
-      toggleContentDisable();
-    }
-  }
-});
+//   // check if edit menu is open
+//   if (!!document.querySelector(".edit-menu")) {
+//     // check if clicked outside of edit menu
+//     if (!document.querySelector(".edit-menu").contains(e.target)) {
+//       document.querySelector(".edit-menu").remove();
+//       ////toggleVeil();
+//     }
+//   }
+// });
 
 window.onload = () => {
   // create default project

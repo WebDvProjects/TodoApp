@@ -1,14 +1,20 @@
 // contains functions that are needed by more than one script
 // this prevents cyclic dependencies
 
-export function toggleContentDisable() {
-  document
-    .querySelectorAll(
-      ".content > :nth-child(n):not(.project-add-menu,.task-add-menu, .edit-menu)"
-    )
-    .forEach((element) => {
-      element.classList.toggle("disabled");
-    });
+const veil = document.createElement("div");
+veil.classList.add("veil");
+veil.addEventListener("click", () => {
+  document.querySelector(".popup").remove();
+  // toggleVeil();
+});
+document.querySelector(".content").append(veil);
+
+export function toggleVeil() {
+  if (veil.classList.contains("disabled")) {
+    veil.classList.remove("disabled");
+  } else {
+    veil.classList.add("disabled");
+  }
 }
 
 export function validate(...inputs) {
