@@ -10,7 +10,39 @@ sideBarTitle.textContent = "PROJECTS";
 // add icon
 const addIcon = document.createElement("ion-icon");
 addIcon.setAttribute("name", "add-outline");
-// addIcon.onclick = displayProjectAddMenu;
+
+export const projectEntryForm = document.createElement("form");
+projectEntryForm.classList.add("project-entry-form");
+const newProjectEntry = document.createElement("div");
+newProjectEntry.classList.add("project-entry", "hidden");
+const addProjectInput = document.createElement("input");
+addProjectInput.setAttribute("type", "text");
+addProjectInput.setAttribute("placeholder", "Project Name");
+addProjectInput.classList.add("project-name-input");
+const enterBtn = document.createElement("ion-icon");
+enterBtn.setAttribute("name", "enter-outline");
+// if enter/submit btn is clicked
+enterBtn.onclick = () => {
+  projectEntryForm.dispatchEvent(new Event("submit"));
+};
+
+newProjectEntry.append(addProjectInput, enterBtn);
+projectEntryForm.append(newProjectEntry);
+
+// when add project button is clicked
+addIcon.onclick = () => {
+  // display project input
+  newProjectEntry.classList.toggle("hidden");
+
+  // change the icon to minus icon
+  if (addIcon.getAttribute("name") === "add-outline") {
+    addIcon.setAttribute("name", "remove-outline");
+  }
+  // change the icon to add icon
+  else {
+    addIcon.setAttribute("name", "add-outline");
+  }
+};
 
 sideBarTitleArea.append(sideBarTitle, addIcon);
 
@@ -19,7 +51,7 @@ const projectsList = document.createElement("ul");
 projectsList.classList.add("projects-list");
 // sample project list items todo - remove after testing
 
-sideBar.append(sideBarTitleArea, projectsList);
+sideBar.append(sideBarTitleArea, projectEntryForm, projectsList);
 
 export function getSidebar() {
   return sideBar;
@@ -35,8 +67,8 @@ export function addProjectListItem(id, name, callBack = null) {
   projectListItem.classList.add("project-list-item");
   projectListItem.setAttribute("data-project-id", id);
   projectListItem.textContent = name;
-
   projectListItem.onclick = (e) => {
+    console.log("projectListItem: click event triggered");
     e.stopPropagation();
     const projectListItems = document.querySelectorAll(".project-list-item");
     projectListItems.forEach((item) => {

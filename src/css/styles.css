@@ -33,7 +33,7 @@ header.header {
   justify-content: space-between;
   align-items: center;
 
-  z-index: 3;
+  z-index: 2;
   position: relative;
 }
 
@@ -59,24 +59,27 @@ header.header {
 }
 
 div.side-bar {
-  --sidebar-l-r-padding: 20px;
+  /* --sidebar-l-r-padding: 20px; */
   grid-area: sidebar;
   background-color: var(--primary-color);
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 200px;
 
-  padding: 15px var(--sidebar-l-r-padding);
-
+  gap: 10px;
   color: rgb(199, 197, 197);
 
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 }
 
 .side-bar .side-bar-title-area {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+  margin: 10px 0;
   /* margin-bottom: 10px; */
 }
 
@@ -90,7 +93,6 @@ div.side-bar {
   --ionicon-stroke-width: 40px;
 }
 
-.project-add-menu,
 .task-add-menu,
 .edit-menu {
   --menu-width: 40vmin;
@@ -115,7 +117,6 @@ div.side-bar {
   overflow: hidden;
 }
 
-.project-add-menu-close-btn,
 .task-add-menu-close-btn,
 .edit-menu-close-btn {
   position: absolute;
@@ -127,15 +128,12 @@ div.side-bar {
   color: #fff;
   cursor: pointer;
 }
-.project-add-menu-close-btn:hover,
 .task-add-menu-close-btn:hover,
 .edit-menu-close-btn:hover {
   --ionicon-stroke-width: 40px;
   font-size: 1.1em;
 }
 
-.project-add-menu input,
-.project-add-menu button,
 .task-add-menu input,
 .task-add-menu button {
   width: 100%;
@@ -143,7 +141,6 @@ div.side-bar {
   padding: 10px;
 }
 
-.project-add-menu button,
 .task-add-menu button {
   margin-top: 20px;
   background-color: #000;
@@ -151,12 +148,10 @@ div.side-bar {
 
   position: relative;
 }
-.project-add-menu button:hover,
 .task-add-menu button:hover {
   background-color: rgba(0, 0, 0, 0.888);
 }
 
-.project-add-menu button span,
 .task-add-menu button span {
   position: absolute;
   color: red;
@@ -186,8 +181,9 @@ textarea {
 
 .projects-list {
   /* overflow-y: auto; */
-  margin-top: 20px;
+  /* margin-top: 20px; */
   width: 100%;
+  padding: 10px;
 }
 
 .projects-list .project-list-item {
@@ -202,27 +198,25 @@ textarea {
   /* border-radius: 10px; */
 }
 
-.projects-list .project-list-item:hover,
+.project-list-item:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .projects-list .project-list-item.active {
   --bgcolor: rgba(255, 255, 255, 0.5);
-  /* background-color: var(--bgcolor); */
-  box-shadow: 0 0 0 var(--sidebar-l-r-padding) var(--bgcolor),
-    inset 0 0 0 calc(var(--list-item-l-r-padding) + 0.5em) var(--bgcolor);
-  clip-path: inset(0 calc(-1 * var(--sidebar-l-r-padding)));
+  background-color: var(--bgcolor);
   animation: bg-expand 0.3s ease-in-out;
+  box-shadow: 0 0 0 50px var(--bgcolor);
+  clip-path: inset(0 -100px);
   color: black;
 }
 
 @keyframes bg-expand {
   0% {
-    box-shadow: inset 0 0 0 0 var(--bgcolor);
-    color: rgb(199, 197, 197);
-  }
-  50% {
     clip-path: inset(0 0);
   }
   100% {
-    clip-path: inset(0 calc(-1 * var(--sidebar-l-r-padding)));
+    clip-path: inset(0 calc(-1 * var(100px)));
   }
 }
 
@@ -244,7 +238,7 @@ textarea {
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   gap: 15px;
 
   position: relative;
@@ -263,15 +257,6 @@ textarea {
 
 .project-title .project-name {
   color: aqua;
-}
-
-.project-info :has(+ .project-description) {
-  font-size: 1.3rem;
-}
-
-.project-info .project-description {
-  padding-left: 10px;
-  margin: 5px 0;
 }
 
 .task-area {
@@ -496,8 +481,9 @@ button:disabled {
   pointer-events: none;
 }
 
+.hidden,
 .content:not(:has(.popup)) .veil {
-  display: none;
+  display: none !important;
 }
 
 .veil {
@@ -510,10 +496,11 @@ button:disabled {
   z-index: 1;
 
   backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .popup {
-  z-index: 2;
+  z-index: 3;
 }
 
 @media (width >=1200px) {
@@ -535,8 +522,32 @@ button:disabled {
 }
 
 svg#svg-menu-icon {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   fill: #fff;
+}
+
+.project-entry {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.484);
+
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  padding: 0 5px;
+}
+
+.project-entry .project-name-input {
+  border: 0;
+  padding: 10px;
+}
+
+.project-entry ion-icon[name="enter-outline"] {
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: black;
+  border-left: 1px solid black;
 }

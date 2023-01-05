@@ -1,4 +1,4 @@
-const project = (name, id, description, tasks = {}) => {
+const project = (name, id, tasks = {}) => {
   var tasks = tasks;
   /* Initial starting id will be -1 + 1 = 0 
    ...[] returns -Infinity so -1 will always be greater
@@ -6,7 +6,6 @@ const project = (name, id, description, tasks = {}) => {
    then increment the last id element by 1 */
   let taskId = Math.max(-1, ...Object.keys(tasks)) + 1;
   let projectName = name;
-  let projectDescription = description;
 
   // add/update task
   function addTask(name, description, dueDate, priority, task_id = taskId++) {
@@ -19,7 +18,7 @@ const project = (name, id, description, tasks = {}) => {
   }
 
   function toggleTaskStatus(taskId) {
-    tasks[taskId].toggleStatus();
+    tasks[taskId].toggleStatus(true);
   }
 
   function getTask(taskID) {
@@ -51,14 +50,13 @@ const project = (name, id, description, tasks = {}) => {
 
   const markAllTasksDone = function () {
     for (const task of Object.values(tasks)) {
-      task.toggleStatus();
+      task.toggleStatus(true);
     }
   };
 
   return {
     name: projectName,
     id,
-    description: projectDescription,
     getTasks,
     addTask,
     removeTask,
@@ -76,8 +74,8 @@ const task = (id, name, description, dueDate, priority, status = false) => {
     return description;
   }
 
-  function toggleStatus() {
-    completed = !completed;
+  function toggleStatus(done) {
+    completed = done ?? !completed;
   }
 
   function isComplete() {
@@ -91,15 +89,21 @@ let idCounter = 0;
 
 export const projectLibrary = (() => {
   const projects = {};
+  // todo: change to updateProject
   const addProject = function (project) {
     projects[project.id] = project;
+  };
+  const addNewProject = (name) => {
+    const newProject = project(name, idCounter++);
+    addProject(newProject);
+    return newProject.id;
   };
   const getProject = function (id) {
     return projects[id] ?? null;
   };
 
-  const updateProject = function (id, name, description) {
-    projects[id] = project(name, id, description, projects[id].getTasks());
+  const updateProject = function (id, name) {
+    projects[id] = project(name, id, projects[id].getTasks());
   };
 
   const updateProjectTask = function (
@@ -161,6 +165,7 @@ export const projectLibrary = (() => {
 
   return {
     addProject,
+    addNewProject,
     getProject,
     removeProject,
     getProjects,
@@ -179,14 +184,14 @@ export const projectLibrary = (() => {
 })();
 
 // creates a new project and adds the project list item to the sidebar
-export function createProject(name, description = "") {
-  const newProject = project(name, idCounter, description);
-  // add project to library
-  projectLibrary.addProject(newProject);
+// export function createProject(name, description = "") {
+//   const newProject = project(name, idCounter, description);
+//   // add project to library
+//   projectLibrary.addProject(newProject);
 
-  return idCounter++;
-}
+//   return idCounter++;
+// }
 
-export function getProjectLibrary() {
-  return projectLibrary;
-}
+// export function getProjectLibrary() {
+//   return projectLibrary;
+// }

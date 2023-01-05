@@ -1,6 +1,6 @@
-import { getProjectLibrary, projectLibrary } from "../projects";
+import { projectLibrary } from "../projects";
 import { validate, toggleVeil } from "../intermediary";
-// import { projectsList } from "./sidebar";
+import { projectEntryForm, addProjectListItem } from "./sidebar";
 
 const main = document.createElement("main");
 main.classList.add("main");
@@ -8,12 +8,6 @@ main.classList.add("main");
 // content
 const projectTitle = document.createElement("div");
 projectTitle.classList.add("project-title");
-
-const projectInfo = document.createElement("div");
-projectInfo.classList.add("project-info");
-const projectInfoTitle = document.createElement("div");
-projectInfoTitle.textContent = "Project Description:";
-projectInfo.append(projectInfoTitle);
 
 // task area
 const taskArea = document.createElement("div");
@@ -54,7 +48,7 @@ export function getMain() {
 
 export function displayProject(projectId) {
   clearMain();
-  const project = getProjectLibrary().getProject(projectId);
+  const project = projectLibrary.getProject(projectId);
   if (!!!project) return;
   currentProjectId = project.id;
   // update project name in sidebar list
@@ -91,16 +85,9 @@ export function displayProject(projectId) {
     deleteProjectIcon
   );
 
-  const projectDescription = document.createElement("p");
-  projectDescription.classList.add("project-description");
-  projectDescription.textContent =
-    project.description === "" ? "No description" : project.description;
-
-  projectInfo.append(projectInfoTitle, projectDescription);
-
   displayTasks();
 
-  main.append(projectTitle, projectInfo, taskArea);
+  main.append(projectTitle, taskArea);
 }
 
 function displayTasks() {
@@ -191,17 +178,18 @@ export function addNewTask(name, description, dueDate, priority) {
 export function clearMain() {
   main.innerHTML = "";
   projectTitle.innerHTML = "";
-  projectInfo.innerHTML = "";
   taskArea.innerHTML = "";
 }
 
 function showEditMenu(type, taskId) {
+  document.querySelector(".popup")?.remove();
+
   type = type.toLowerCase();
   if (!(type === "project" || type === "task")) return;
   // convert to title case
   type = type[0].toUpperCase() + type.slice(1);
 
-  const project = getProjectLibrary().getProject(currentProjectId);
+  const project = projectLibrary.getProject(currentProjectId);
   const task = !!taskId ? project.getTask(taskId) : null;
 
   const editMenu = document.createElement("div");
@@ -308,3 +296,43 @@ function showEditMenu(type, taskId) {
 
   document.querySelector(".content").append(editMenu);
 }
+
+projectEntryForm.onsubmit = handleSubmitEvent;
+
+function handleSubmitEvent(e) {
+  e.preventDefault();
+  const projectNameInput = document.querySelector("input.project-name-input");
+  if (!!projectNameInput.value) {
+    createNewProject(projectNameInput.value);
+    projectNameInput.value = "";
+  }
+}
+
+function createNewProject(name) {
+  const newProjectId = projectLibrary.addNewProject(name);
+  currentProjectId = newProjectId;
+
+  // add project to project list
+  addProjectListItem(newProjectId, name, function () {
+    // display project on main content
+    displayProject(newProjectId);
+  });
+
+  // if there is only one project, display it
+  if (
+    !!!document.querySelector(".project-list-item.active") &&
+    projectLibrary.size() === 1
+  ) {
+    const projectListItems = document.querySelectorAll(".project-list-item");
+    // execute the onclick event of the first project list item
+    projectListItems[0].dispatchEvent(new Event("click"));
+  }
+}
+
+window.onload = () => {
+  // create default project
+  createNewProject("Default Project");
+  addNewTask("Task 1", "Default Task Description", "2021-01-01", "low");
+  addNewTask("Task 2", "Default Task Description", "2021-01-01", "medium");
+  addNewTask("Task 3", "Default Task Description", "2021-01-01", "high");
+};
