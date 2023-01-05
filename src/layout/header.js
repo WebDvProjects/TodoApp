@@ -7,8 +7,16 @@ export function getHeader() {
 
   const menuIcon = document.createElement("div");
   menuIcon.classList.add("menu-icon");
-  const iconSvg = `<svg id="svg-menu-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="50px" height="50px" fill-rule="nonzero"><g fill="#fff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M0,7.5v5h50v-5zM0,22.5v5h50v-5zM0,37.5v5h50v-5z"></path></g></g></svg>`;
+  const iconSvg = `<svg id="svg-menu-icon" width="151" height="108" viewBox="0 0 151 108" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <rect id="top" x="0.782349" y="90.127" width="150" height="17.7966" />
+  <rect id="middle" x="0.782349" y="45.3303" width="150" height="17.7966" />
+  <rect id="bottom" x="0.782349" y="0.533722" width="150" height="17.7966" />
+</svg>`;
   menuIcon.innerHTML = iconSvg;
+
+  menuIcon.onclick = () => {
+    menuIcon.classList.toggle("active");
+  };
   header.append(titleLogo, menuIcon);
   return header;
 }

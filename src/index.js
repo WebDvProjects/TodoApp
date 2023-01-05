@@ -8,7 +8,7 @@ import {
   addNewTaskBtn,
 } from "./layout/main-content";
 import { getFooter } from "./layout/footer";
-import { validate, toggleVeil } from "./intermediary";
+import { validate, toggleVeil } from "./helper-functions";
 
 // style imports
 import "./css/styles.css";
@@ -20,102 +20,11 @@ const content = document.querySelector(".content");
 
 content.append(getHeader(), getSidebar(), getMain(), getFooter());
 
-// add project menu click event
-// getAddBtn().onclick = (e) => {
-//   e.stopPropagation();
-//   // addProjectMenu.displayProjectAddMenu();
-// };
-
 // add task menu click event
 addNewTaskBtn.onclick = (e) => {
   e.stopPropagation();
   addTaskMenu.displayTaskAddMenu();
 };
-
-// const addProjectMenu = (() => {
-//   function displayProjectAddMenu() {
-//     document.querySelector(".popup")?.remove();
-
-//     const projectAddMenu = document.createElement("div");
-//     projectAddMenu.classList.add("project-add-menu", "popup");
-
-//     const projectAddMenuTitle = document.createElement("p");
-//     projectAddMenuTitle.textContent = "New Project";
-
-//     const projectAddMenuCloseBtn = document.createElement("ion-icon");
-//     projectAddMenuCloseBtn.setAttribute("name", "close-outline");
-//     projectAddMenuCloseBtn.classList.add("project-add-menu-close-btn");
-//     projectAddMenuCloseBtn.onclick = () => {
-//       projectAddMenu.remove();
-//       //toggleVeil();
-//     };
-
-//     const projectName = document.createElement("input");
-//     projectName.setAttribute("type", "text");
-//     projectName.setAttribute("placeholder", "Project Name");
-//     projectName.classList.add("project-name");
-
-//     const projectDescription = document.createElement("input");
-//     projectDescription.setAttribute("type", "text");
-//     projectDescription.setAttribute("placeholder", "Project Description");
-//     projectDescription.classList.add("project-description");
-
-//     const projectAddButton = document.createElement("button");
-//     projectAddButton.textContent = "Add";
-//     projectAddButton.classList.add("project-add-button");
-//     const errorLog = document.createElement("span");
-//     projectAddButton.append(errorLog);
-//     projectAddButton.onclick = () => {
-//       // validate input
-//       if (!validate(projectName)) {
-//         errorLog.textContent = "Project name is required";
-//         return;
-//       }
-//       // create and add project to library
-//       createNewProject(projectName.value, projectDescription.value);
-//       projectAddMenu.remove();
-//       //toggleVeil();
-//     };
-
-//     projectAddMenu.append(
-//       projectAddMenuTitle,
-//       projectName,
-//       projectDescription,
-//       projectAddButton,
-//       projectAddMenuCloseBtn
-//     );
-
-//     content.append(projectAddMenu);
-
-//     //toggleVeil();
-//   }
-
-//   // function createNewProject(name, description) {
-//   //   const newProjectId = createProject(name, description);
-
-//   //   // todo add callback function to display project on main content
-//   //   addProjectListItem(newProjectId, name, () => {
-//   //     // display project on main content
-//   //     selectProject(newProjectId);
-//   //   });
-
-//   //   // If there is only one project, select it by default
-//   //   if (projectLibrary.size() === 1) {
-//   //     const projectListItems = document.querySelectorAll(".project-list-item");
-//   //     // execute the onclick event of the first project list item
-//   //     projectListItems[0].dispatchEvent(new Event("click"));
-//   //   }
-//   // }
-
-//   function selectProject(projectId) {
-//     // projectListItem.classList.add("active");
-//     // const projectId = projectListItem.getAttribute("data-project-id");
-//     // const project = getProjectLibrary().getProject(projectId);
-//     displayProject(projectId);
-//   }
-
-//   return { displayProjectAddMenu, createNewProject };
-// })();
 
 const addTaskMenu = (() => {
   function displayTaskAddMenu() {
@@ -195,8 +104,6 @@ const addTaskMenu = (() => {
     );
 
     content.append(taskAddMenu);
-
-    //toggleVeil();
   }
   return { displayTaskAddMenu };
 })();

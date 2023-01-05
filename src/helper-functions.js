@@ -4,8 +4,9 @@
 const veil = document.createElement("div");
 veil.classList.add("veil");
 veil.addEventListener("click", () => {
+  // remove pop up if veil is clicked
   document.querySelector(".popup").remove();
-  // toggleVeil();
+  // todo if under 560px and sidemenu is open then close it (set the hamburger icon to inactive)
 });
 document.querySelector(".content").append(veil);
 

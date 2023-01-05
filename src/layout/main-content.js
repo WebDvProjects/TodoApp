@@ -1,5 +1,5 @@
 import { projectLibrary } from "../projects";
-import { validate, toggleVeil } from "../intermediary";
+import { validate, toggleVeil } from "../helper-functions";
 import { projectEntryForm, addProjectListItem } from "./sidebar";
 
 const main = document.createElement("main");
@@ -23,7 +23,7 @@ taskAreaTitle.textContent = "Tasks:";
 
 const clearAllBtn = document.createElement("button");
 clearAllBtn.classList.add("clear-all-btn");
-clearAllBtn.textContent = "Clear All";
+clearAllBtn.innerHTML = "clear";
 clearAllBtn.onclick = () => {
   projectLibrary.clearAllProjectTasks(currentProjectId);
   displayTasks();
