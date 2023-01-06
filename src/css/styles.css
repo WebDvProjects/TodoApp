@@ -575,6 +575,35 @@ button:disabled {
   --sidebar-width: 0;
 }
 
+.line {
+  --duration: 150ms;
+  --delay: 150ms;
+  transition: opacity 0ms var(--delay), rotate var(--duration) ease-in,
+    y var(--duration) ease-in var(--delay);
+  transform-origin: center;
+}
+
+.menu-icon.active .line {
+  transition: y var(--duration) ease-in,
+    rotate var(--duration) ease-in var(--delay), opacity 0ms var(--delay);
+}
+
+.menu-icon.active :is(.top, .bottom) {
+  y: 45;
+}
+
+.menu-icon.active .middle {
+  opacity: 0;
+}
+
+.menu-icon.active .top {
+  rotate: -45deg;
+}
+
+.menu-icon.active .bottom {
+  rotate: 45deg;
+}
+
 @media (min-width: 992px) {
   .main {
     padding: 50px 200px;

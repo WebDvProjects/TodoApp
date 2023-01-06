@@ -7,10 +7,11 @@ export function getHeader() {
 
   const menuIcon = document.createElement("div");
   menuIcon.classList.add("menu-icon");
-  const iconSvg = `<svg id="svg-menu-icon" width="151" height="108" viewBox="0 0 151 108" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <rect id="top" x="0.782349" y="90.127" width="150" height="17.7966" />
-  <rect id="middle" x="0.782349" y="45.3303" width="150" height="17.7966" />
-  <rect id="bottom" x="0.782349" y="0.533722" width="150" height="17.7966" />
+  const iconSvg = `  <svg id="svg-menu-icon"viewBox="0 0 100 100" >
+  <rect class="line top" width="80" height="10" rx="5" y=15 x=10 ></rect>
+  <rect class="line middle" width="80" height="10" rx="5" y=45 x=10></rect>
+  <rect class="line bottom" width="80" height="10" rx="5" y=75 x=10></rect>
+
 </svg>`;
   menuIcon.innerHTML = iconSvg;
 
