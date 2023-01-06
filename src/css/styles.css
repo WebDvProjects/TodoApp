@@ -53,9 +53,9 @@ header.header {
 }
 
 .title-logo {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 5px 5px;
   background-color: aqua;
   color: #000;
 
@@ -275,7 +275,7 @@ textarea {
 }
 
 .main .project-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   padding: 5px 0;
   white-space: nowrap;
 
@@ -312,31 +312,36 @@ textarea {
   align-items: center;
   /* justify-content: space-between; */
   gap: 10px;
-
-  font-size: 1.3rem;
 }
 
-.task-area-header ion-icon {
+.add-new-task-btn,
+.clear-all-btn {
   cursor: pointer;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
-.task-area-header ion-icon:hover {
-  --ionicon-stroke-width: 40px;
-  transform: scale(1.1);
-}
-
-div:has(+ .clear-all-btn) {
-  flex-grow: 1;
+.add-new-task-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  background-color: rgb(0, 175, 0);
+  margin: 0 auto;
+  margin-left: 0;
 }
 
 .clear-all-btn {
   color: red;
-  cursor: pointer;
-  border: none;
   padding: 5px 10px;
   background-color: rgba(255, 255, 255, 0.748);
-  border-radius: 5px;
-  font-weight: bold;
+}
+
+.filter-btn {
+  font-size: 1.4rem;
+  cursor: pointer;
 }
 
 .task-area-content {

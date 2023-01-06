@@ -1,6 +1,7 @@
 import { projectLibrary } from "../projects";
 import { projectEntryForm, addProjectListItem } from "./sidebar";
 import { getPopupMenu } from "./popup-menu";
+import { fetchFromLocalStorage } from "../storage";
 
 const main = document.createElement("main");
 main.classList.add("main");
@@ -17,10 +18,6 @@ taskAreaHeader.classList.add("task-area-header");
 const taskAreaContent = document.createElement("div");
 taskAreaContent.classList.add("task-area-content");
 
-// task area header
-const taskAreaTitle = document.createElement("div");
-taskAreaTitle.textContent = "Tasks:";
-
 const clearAllBtn = document.createElement("button");
 clearAllBtn.classList.add("clear-all-btn");
 clearAllBtn.innerHTML = "clear";
@@ -29,8 +26,9 @@ clearAllBtn.onclick = () => {
   displayTasks();
 };
 
-export const addNewTaskBtn = document.createElement("ion-icon");
-addNewTaskBtn.setAttribute("name", "add-circle-outline");
+const addNewTaskBtn = document.createElement("button");
+addNewTaskBtn.innerHTML =
+  "new <ion-icon  name='add-circle-outline'></ion-icon>";
 addNewTaskBtn.classList.add("add-new-task-btn");
 addNewTaskBtn.onclick = (e) => {
   e.stopPropagation();
@@ -54,7 +52,12 @@ addNewTaskBtn.onclick = (e) => {
   taskMenu.showMenu();
 };
 
-taskAreaHeader.append(taskAreaTitle, clearAllBtn, addNewTaskBtn);
+const filterBtn = document.createElement("ion-icon");
+filterBtn.setAttribute("name", "filter-circle-outline");
+filterBtn.classList.add("filter-btn");
+filterBtn.onclick = (e) => {};
+
+taskAreaHeader.append(addNewTaskBtn, filterBtn, clearAllBtn);
 
 // task area content
 const taskContentWrapper = document.createElement("div");
@@ -183,13 +186,14 @@ function displayTasks() {
 
 function sortTasks(filter) {}
 
-export function addNewTask(name, description, dueDate, priority) {
+export function addNewTask(name, description, dueDate, priority, isDone) {
   projectLibrary.addProjectTask(
     currentProjectId,
     name,
     description,
     dueDate,
-    priority
+    priority,
+    isDone
   );
   // update task area
   displayTasks();
@@ -287,9 +291,41 @@ function createNewProject(name) {
 }
 
 window.onload = () => {
-  // create default project
-  createNewProject("Default Project");
-  addNewTask("Task 1", "Default Task Description", "2021-01-01", "low");
-  addNewTask("Task 2", "Default Task Description", "2021-01-01", "medium");
-  addNewTask("Task 3", "Default Task Description", "2021-01-01", "high");
+  const storage = fetchFromLocalStorage("projects");
+  /* 
+    Format: 
+    {
+        project_id: "project": project_object, "tasks": {task_id: task_object, ...},
+    }
+
+    Format of the project object is as:
+    project: {name: "Project Name", id: "project id"}
+
+    the task object is as:
+    tasks: {
+        task_id: {name: "task name", description: "task description", dueDate: "due date", priority: "priority", done: false/true},
+    */
+
+  // create default project if there is no project in storage
+  if (!!!storage) {
+    createNewProject("Default Project");
+    addNewTask("Task 1", "Default Task Description", "2021-01-01", "low");
+    addNewTask("Task 2", "Default Task Description", "2021-01-01", "medium");
+    addNewTask("Task 3", "Default Task Description", "2021-01-01", "high");
+  } else {
+    const storageKeys = Object.keys(storage);
+    // load projects from storage
+    for (const projectId of storageKeys) {
+      const project = storage[projectId]["project"];
+      const tasks = storage[projectId]["tasks"];
+      createNewProject(project.name); // the currentprojectID is being set
+      const taskKeys = Object.keys(tasks);
+      // add tasks to project
+      for (const taskId of taskKeys) {
+        const task = tasks[taskId];
+        addNewTask(task.name, task.description, task.dueDate, task.priority);
+      }
+    }
+    console.log("loaded from storage: ", storageKeys);
+  }
 };
