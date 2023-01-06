@@ -557,12 +557,15 @@ button:disabled {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 
-  animation: clip-animation 0.3s linear;
+  animation: clip-animation 0.1s linear;
+  display: none;
 }
 
-.hidden,
-.content:not(:has(.popup)) .veil {
+.hidden {
   display: none;
+}
+.content:has(.popup) .veil {
+  display: block;
 }
 
 .popup {
@@ -578,14 +581,14 @@ button:disabled {
 .line {
   --duration: 150ms;
   --delay: 150ms;
-  transition: opacity 0ms var(--delay), rotate var(--duration) ease-in,
+  transition: opacity 0ms var(--delay), transform var(--duration) ease-in,
     y var(--duration) ease-in var(--delay);
   transform-origin: center;
 }
 
 .menu-icon.active .line {
   transition: y var(--duration) ease-in,
-    rotate var(--duration) ease-in var(--delay), opacity 0ms var(--delay);
+    transform var(--duration) ease-in var(--delay), opacity 0ms var(--delay);
 }
 
 .menu-icon.active :is(.top, .bottom) {
@@ -597,11 +600,13 @@ button:disabled {
 }
 
 .menu-icon.active .top {
-  rotate: -45deg;
+  /* rotate: -45deg; */
+  transform: rotate(-45deg);
 }
 
 .menu-icon.active .bottom {
-  rotate: 45deg;
+  /* rotate: 45deg; */
+  transform: rotate(45deg);
 }
 
 @media (min-width: 992px) {
@@ -659,12 +664,9 @@ svg#svg-menu-icon {
 
 @keyframes clip-animation {
   0% {
-    clip-path: circle(0 at 0 0);
-  }
-  75% {
-    clip-path: circle(130% at 0 0);
+    clip-path: circle(0 at 50% 50%);
   }
   100% {
-    clip-path: circle(150% at 0 0);
+    clip-path: circle(100% at 50% 50%);
   }
 }

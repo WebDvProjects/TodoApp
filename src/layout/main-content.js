@@ -307,11 +307,26 @@ window.onload = () => {
     */
 
   // create default project if there is no project in storage
-  if (!!!storage) {
+  if (!!!storage || Object.entries(storage).length === 0) {
     createNewProject("Default Project");
-    addNewTask("Task 1", "Default Task Description", "2021-01-01", "low");
-    addNewTask("Task 2", "Default Task Description", "2021-01-01", "medium");
-    addNewTask("Task 3", "Default Task Description", "2021-01-01", "high");
+    addNewTask(
+      "Task 1",
+      "Default Task Description",
+      new Date().toISOString().slice(0, 10),
+      "low"
+    );
+    addNewTask(
+      "Task 2",
+      "Default Task Description",
+      new Date().toISOString().slice(0, 10),
+      "medium"
+    );
+    addNewTask(
+      "Task 3",
+      "Default Task Description",
+      new Date().toISOString().slice(0, 10),
+      "high"
+    );
   } else {
     const storageKeys = Object.keys(storage);
     // load projects from storage
@@ -323,7 +338,14 @@ window.onload = () => {
       // add tasks to project
       for (const taskId of taskKeys) {
         const task = tasks[taskId];
-        addNewTask(task.name, task.description, task.dueDate, task.priority);
+        console.log(task);
+        addNewTask(
+          task.name,
+          task.description,
+          task.dueDate,
+          task.priority,
+          task.done
+        );
       }
     }
     console.log("loaded from storage: ", storageKeys);

@@ -55,6 +55,7 @@ const AddTaskMenu = function () {
   this.taskName.setAttribute("type", "text");
   this.taskName.setAttribute("placeholder", "Task Name");
   this.taskName.classList.add("add-task-name");
+  this.taskName.required = true;
 
   this.taskDescription = document.createElement("input");
   this.taskDescription.setAttribute("type", "text");
@@ -64,6 +65,7 @@ const AddTaskMenu = function () {
   this.taskDueDate = document.createElement("input");
   this.taskDueDate.setAttribute("type", "date");
   this.taskDueDate.classList.add("select-task-due-date");
+  this.taskDueDate.defaultValue = new Date().toISOString().slice(0, 10);
 
   this.taskPriority = document.createElement("select");
   this.taskPriority.classList.add("select-task-priority");
@@ -159,7 +161,6 @@ const EditMenu = function (category) {
   this.descriptionInput.setAttribute("type", "text");
   this.descriptionInput.id = "edit-description";
   this.descriptionInput.placeholder = "Description";
-  this.descriptionInput.required = true;
   descriptionLabel.setAttribute("for", "edit-description");
   descriptionLabel.append(this.descriptionInput);
 
@@ -168,7 +169,6 @@ const EditMenu = function (category) {
   this.dueDateInput = document.createElement("input");
   this.dueDateInput.setAttribute("type", "date");
   this.dueDateInput.id = "edit-due-date";
-  this.dueDateInput.required = true;
   dueDateLabel.setAttribute("for", "edit-due-date");
   dueDateLabel.append(this.dueDateInput);
 
@@ -176,7 +176,6 @@ const EditMenu = function (category) {
   priorityLabel.textContent = "Priority: ";
   this.priorityInput = document.createElement("select");
   this.priorityInput.id = "edit-priority";
-  this.priorityInput.required = true;
   taskPriorityOptions.forEach((option) => {
     const optionElement = document.createElement("option");
     optionElement.setAttribute("value", option.value);
