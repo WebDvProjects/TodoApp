@@ -124,15 +124,15 @@ div.side-bar {
   border-left: 1px solid black;
 }
 
-.task-add-menu,
+.popup,
 .edit-menu {
   --menu-width: 40vmin;
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 50%;
 
   width: clamp(300px, var(--menu-width), 500px);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   background-color: rgba(255, 255, 255, 0.748);
   color: #000;
 
@@ -165,25 +165,24 @@ div.side-bar {
   font-size: 1.1em;
 }
 
-.task-add-menu input,
-.task-add-menu button {
+.popup :is(button, input) {
   width: 100%;
   border-radius: 5px;
   padding: 10px;
 }
 
-.task-add-menu button {
+.popup button {
   margin-top: 20px;
   background-color: #000;
   color: #fff;
 
   position: relative;
 }
-.task-add-menu button:hover {
+.popup button:hover {
   background-color: rgba(0, 0, 0, 0.888);
 }
 
-.task-add-menu button span {
+.popup button span {
   position: absolute;
   color: red;
   top: -25px;
@@ -602,6 +601,18 @@ button:disabled {
 
   .content:has(.menu-icon.active) .veil {
     display: block;
+  }
+}
+
+@media (max-height: 560px) {
+  .popup {
+    top: 10%;
+  }
+}
+
+@media (max-height: 360px) {
+  .popup {
+    top: 5%;
   }
 }
 

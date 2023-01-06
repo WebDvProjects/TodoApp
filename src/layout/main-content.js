@@ -1,6 +1,7 @@
 import { projectLibrary } from "../projects";
 import { validate, toggleVeil } from "../helper-functions";
 import { projectEntryForm, addProjectListItem } from "./sidebar";
+import { getPopupMenu } from "./popup-menu";
 
 const main = document.createElement("main");
 main.classList.add("main");
@@ -32,6 +33,27 @@ clearAllBtn.onclick = () => {
 export const addNewTaskBtn = document.createElement("ion-icon");
 addNewTaskBtn.setAttribute("name", "add-circle-outline");
 addNewTaskBtn.classList.add("add-new-task-btn");
+addNewTaskBtn.onclick = (e) => {
+  e.stopPropagation();
+  const taskMenu = getPopupMenu("add");
+  console.log(taskMenu);
+  if (!!!taskMenu) alert("We have a problem in our code");
+
+  // set a callback function for the submit button
+  taskMenu.setSubmitEvent(
+    function () {
+      addNewTask(
+        this.taskName.value,
+        this.taskDescription.value,
+        this.taskDueDate.value,
+        this.taskPriority.value
+      );
+    }
+      // bind the callback function to the taskMenu object
+      .bind(taskMenu)
+  );
+  taskMenu.showMenu();
+};
 
 taskAreaHeader.append(taskAreaTitle, clearAllBtn, addNewTaskBtn);
 
