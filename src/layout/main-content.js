@@ -1,5 +1,4 @@
 import { projectLibrary } from "../projects";
-import { validate, toggleVeil } from "../helper-functions";
 import { projectEntryForm, addProjectListItem } from "./sidebar";
 import { getPopupMenu } from "./popup-menu";
 
@@ -155,7 +154,6 @@ function displayTasks() {
       taskEditIcon.setAttribute("name", "create-outline");
       taskEditIcon.onclick = (e) => {
         showEditMenu("task", taskId);
-        // toggleVeil();
         e.stopPropagation();
       };
       const taskDeleteIcon = document.createElement("ion-icon");
@@ -203,120 +201,57 @@ export function clearMain() {
   taskArea.innerHTML = "";
 }
 
-function showEditMenu(type, taskId) {
-  document.querySelector(".popup")?.remove();
+function showEditMenu(category, taskId) {
+  // fail safe
+  if (!(category === "project" || category === "task")) return;
 
-  type = type.toLowerCase();
-  if (!(type === "project" || type === "task")) return;
-  // convert to title case
-  type = type[0].toUpperCase() + type.slice(1);
+  switch (category) {
+    case "project":
+      const project = projectLibrary.getProject(currentProjectId);
+      const projectMenu = getPopupMenu("edit", "project");
+      projectMenu.setDisplayText(project.name);
+      projectMenu.setSubmitEvent(
+        function () {
+          // check if mark all tasks as complete is checked
+          if (this.markAsComplete.getAttribute("checked") === "true")
+            projectLibrary.markAllTasksDone(project.id);
+          projectLibrary.updateProject(project.id, this.nameInput.value);
 
-  const project = projectLibrary.getProject(currentProjectId);
-  const task = !!taskId ? project.getTask(taskId) : null;
-
-  const editMenu = document.createElement("div");
-  editMenu.classList.add("edit-menu", "popup");
-
-  const editMenuTitle = document.createElement("div");
-  editMenuTitle.classList.add("edit-menu-title");
-  editMenuTitle.textContent = `Edit ${type}`;
-
-  const editMenuContent = document.createElement("div");
-  editMenuContent.classList.add("edit-menu-content");
-
-  const nameLabel = document.createElement("label");
-  nameLabel.setAttribute("for", "edit-menu-name");
-  nameLabel.textContent = `${type} name`;
-  const name = document.createElement("input");
-  name.setAttribute("type", "text");
-  name.id = "edit-menu-name";
-  name.required = true;
-  name.setAttribute("placeholder", `${type} name`);
-  nameLabel.append(name);
-
-  const descriptionLabel = document.createElement("label");
-  descriptionLabel.setAttribute("for", "edit-menu-description");
-  descriptionLabel.textContent = `${type} description`;
-  const description = document.createElement("textarea");
-  description.setAttribute("placeholder", `${type} description`);
-  description.id = "edit-menu-description";
-  descriptionLabel.append(description);
-
-  editMenuContent.append(nameLabel, descriptionLabel);
-
-  const saveBtn = document.createElement("button");
-  saveBtn.classList.add("save-btn");
-  saveBtn.textContent = "Save";
-
-  if (type === "Project") {
-    name.value = project.name;
-    description.textContent = project.description;
-
-    const markAllDone = document.createElement("div");
-    markAllDone.classList.add("mark-all-done");
-    const markText = document.createElement("p");
-    markText.textContent = "Mark all tasks as done";
-    const markAllDoneBtn = document.createElement("div");
-    markAllDoneBtn.classList.add("mark-all-done-btn");
-    markAllDoneBtn.setAttribute("checked", "false");
-    markAllDoneBtn.onclick = () => {
-      markAllDoneBtn.setAttribute(
-        "checked",
-        markAllDoneBtn.getAttribute("checked") === "true" ? "false" : "true"
+          // update display
+          displayProject(currentProjectId);
+        }.bind(projectMenu)
       );
-    };
+      projectMenu.showMenu();
+      break;
+    case "task":
+      const task = projectLibrary.getProject(currentProjectId).getTask(taskId);
+      const taskMenu = getPopupMenu("edit", "task");
+      taskMenu.setDisplayText(
+        task.name,
+        task.description,
+        task.dueDate,
+        task.priority,
+        task.isComplete()
+      );
+      taskMenu.setSubmitEvent(
+        function () {
+          projectLibrary.updateProjectTask(
+            currentProjectId,
+            taskId,
+            this.nameInput.value,
+            this.descriptionInput.value,
+            this.dueDateInput.value,
+            this.priorityInput.value,
+            this.markAsComplete.getAttribute("checked") === "true"
+          );
 
-    markAllDone.append(markText, markAllDoneBtn);
-
-    editMenuContent.append(markAllDone);
-  } else if (type === "Task" && !!task) {
-    name.value = task.name;
-    description.textContent = task.description;
+          // update display
+          displayProject(currentProjectId);
+        }.bind(taskMenu)
+      );
+      taskMenu.showMenu();
+      break;
   }
-
-  const editMenuCloseBtn = document.createElement("ion-icon");
-  editMenuCloseBtn.setAttribute("name", "close-outline");
-  editMenuCloseBtn.classList.add("edit-menu-close-btn");
-  editMenuCloseBtn.onclick = () => {
-    editMenu.remove();
-    // toggleVeil();
-  };
-
-  saveBtn.onclick = () => {
-    // General Validation
-    if (!validate(name)) {
-      return;
-    }
-
-    if (type === "Project") {
-      // check if mark all done is checked
-      if (
-        document.querySelector(".mark-all-done-btn").getAttribute("checked") ===
-        "true"
-      ) {
-        projectLibrary.markAllTasksDone(currentProjectId);
-      }
-      // update project in the library
-      projectLibrary.updateProject(
-        currentProjectId,
-        name.value,
-        description.value
-      );
-      // update project display
-      displayProject(currentProjectId);
-    } else if (type === "Task") {
-      // update task in the library
-
-      // update task area
-      displayTasks();
-    }
-    editMenu.remove();
-    // toggleVeil();
-  };
-
-  editMenu.append(editMenuTitle, editMenuContent, editMenuCloseBtn, saveBtn);
-
-  document.querySelector(".content").append(editMenu);
 }
 
 projectEntryForm.onsubmit = handleSubmitEvent;

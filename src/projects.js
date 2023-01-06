@@ -13,12 +13,16 @@ const project = (name, id, tasks = {}) => {
     return task_id;
   }
 
+  function updateTask(id, name, description, dueDate, priority, status) {
+    tasks[id] = task(id, name, description, dueDate, priority, status);
+  }
+
   function copyTasks(taskList) {
     tasks = taskList;
   }
 
   function toggleTaskStatus(taskId) {
-    tasks[taskId].toggleStatus(true);
+    tasks[taskId].toggleStatus();
   }
 
   function getTask(taskID) {
@@ -59,6 +63,7 @@ const project = (name, id, tasks = {}) => {
     id,
     getTasks,
     addTask,
+    updateTask,
     removeTask,
     status,
     getTask,
@@ -115,7 +120,14 @@ export const projectLibrary = (() => {
     priority,
     status
   ) {
-    projects[[projectId]].add(name, description, dueDate, priority, taskId);
+    projects[projectId].updateTask(
+      taskId,
+      name,
+      description,
+      dueDate,
+      priority,
+      status
+    );
   };
 
   const toggleTaskStatus = function (projectId, taskId) {

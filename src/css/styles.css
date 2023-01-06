@@ -497,14 +497,14 @@ div:has(+ .clear-all-btn) {
   transition: transform 0.2s ease;
 }
 
-.mark-all-done-btn[checked="true"] {
+.mark-all-done[checked="true"] .mark-all-done-btn {
   /* justify-content: end; */
   background-color: aqua;
   box-shadow: inset 0 0 0.75rem #000;
   /* transform: translateX(20px); */
 }
 
-.mark-all-done-btn[checked="true"]::before {
+.mark-all-done[checked="true"] .mark-all-done-btn::before {
   transform: translateX(20px);
 }
 
