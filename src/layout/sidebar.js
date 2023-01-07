@@ -18,13 +18,13 @@ const newProjectEntry = document.createElement("div");
 newProjectEntry.classList.add("project-entry");
 const addProjectInput = document.createElement("input");
 addProjectInput.setAttribute("type", "text");
-addProjectInput.setAttribute("placeholder", "New project");
+addProjectInput.setAttribute("placeholder", "New Project");
 addProjectInput.classList.add("project-name-input");
 const enterBtn = document.createElement("ion-icon");
 enterBtn.setAttribute("name", "enter-outline");
 // if enter/submit btn is clicked
 enterBtn.onclick = () => {
-  projectEntryForm.submit();
+  projectEntryForm.dispatchEvent(new Event("submit"));
 };
 
 newProjectEntry.append(addProjectInput, enterBtn);

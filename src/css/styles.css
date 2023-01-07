@@ -586,7 +586,7 @@ button:disabled {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 
-  animation: clip-animation 0.1s linear;
+  /* animation: clip-animation 0.1s linear; */
   display: none;
 }
 
