@@ -221,7 +221,6 @@ const EditMenu = function (category) {
     priority = null,
     markAsComplete = null
   ) => {
-    console.log(name, description, dueDate, priority);
     this.nameInput.value = name;
     this.descriptionInput.value = description ?? "";
     this.dueDateInput.value = dueDate ?? "";

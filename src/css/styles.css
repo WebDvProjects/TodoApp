@@ -349,7 +349,7 @@ textarea {
 
   position: relative;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   overscroll-behavior: contain;
 }
 
@@ -381,10 +381,6 @@ textarea {
   overflow: hidden;
 }
 
-.task:hover {
-  /* todo */
-}
-
 .task-info {
   flex-grow: 1;
 }
@@ -395,15 +391,21 @@ textarea {
 }
 
 .task-status {
+  --radio-radius: 50%;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: var(--radio-radius);
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.484);
   position: relative;
+  transition: border-radius 0.3s ease-in-out;
 }
 
-.task-status[data-status="complete"]::before {
+.task-status[data-status="complete"] {
+  --radio-radius: 15%;
+}
+
+.task-status::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -411,8 +413,14 @@ textarea {
   transform: translate(-50%, -50%);
   width: 14px;
   height: 14px;
-  border-radius: 50%;
-  background-color: rgba(15, 237, 237, 0.891);
+  border-radius: var(--radio-radius);
+  background-color: rgba(0, 40, 200, 0.891);
+  visibility: hidden;
+  transition: visibility 0s 0.1s, border-radius 0.3s ease-in-out;
+}
+
+.task-status[data-status="complete"]::before {
+  visibility: visible;
 }
 
 .task-priority {

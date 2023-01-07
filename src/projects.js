@@ -1,7 +1,7 @@
 import { updateLocalStorage } from "./storage";
 
-const project = (name, id, tasks = {}) => {
-  var tasks = tasks;
+const project = (name, id, projectTasks = {}) => {
+  let tasks = projectTasks;
   /* Initial starting id will be -1 + 1 = 0 
    ...[] returns -Infinity so -1 will always be greater
    Otheriwse if the project is being updated/assigned with a list of tasks
@@ -38,11 +38,6 @@ const project = (name, id, tasks = {}) => {
     delete tasks[id];
   }
 
-  function clearAllTasks() {
-    tasks = {};
-    taskId = 0;
-  }
-
   function getTasks() {
     return tasks;
   }
@@ -73,7 +68,6 @@ const project = (name, id, tasks = {}) => {
     status,
     getTask,
     toggleTaskStatus,
-    clearAllTasks,
     markAllTasksDone,
   };
 };
@@ -86,7 +80,6 @@ const task = (id, name, description, dueDate, priority, status = false) => {
 
   function toggleStatus(done) {
     completed = done ?? !completed;
-    console.log(completed);
   }
 
   function isComplete() {
@@ -168,7 +161,7 @@ export const projectLibrary = (() => {
 
   const getProjectTasks = function (projectId) {
     const tasks = projects[projectId].getTasks();
-    updateStorage();
+    // updateStorage();
 
     return tasks;
   };
@@ -190,7 +183,7 @@ export const projectLibrary = (() => {
   // };
 
   const clearAllProjectTasks = function (projectId) {
-    projects[projectId].clearAllTasks();
+    projects[projectId] = project(projects[projectId].name, projectId);
     updateStorage();
   };
 
@@ -206,7 +199,7 @@ export const projectLibrary = (() => {
     return Object.keys(projects).length;
   };
 
-  function updateStorage() {
+  const updateStorage = function () {
     const storageStructure = {};
     // structure = projects: {project1: {task1: {name: "task1", ...}, task2: {...}}, project2: {...}}
     Object.keys(projects).forEach((key) => {
@@ -226,7 +219,7 @@ export const projectLibrary = (() => {
       };
     });
     updateLocalStorage("projects", storageStructure);
-  }
+  };
 
   return {
     addProject,

@@ -68,7 +68,6 @@ export function addProjectListItem(id, name, callBack = null) {
   projectListItem.setAttribute("data-project-id", id);
   projectListItem.textContent = name;
   projectListItem.onclick = (e) => {
-    console.log("projectListItem: click event triggered");
     e.stopPropagation();
     const projectListItems = document.querySelectorAll(".project-list-item");
     projectListItems.forEach((item) => {

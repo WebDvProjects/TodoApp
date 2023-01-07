@@ -33,7 +33,6 @@ addNewTaskBtn.classList.add("add-new-task-btn");
 addNewTaskBtn.onclick = (e) => {
   e.stopPropagation();
   const taskMenu = getPopupMenu("add");
-  console.log(taskMenu);
   if (!!!taskMenu) alert("We have a problem in our code");
 
   // set a callback function for the submit button
@@ -271,9 +270,8 @@ function handleSubmitEvent(e) {
 
 function createNewProject(name) {
   const newProjectId = projectLibrary.addNewProject(name);
-  currentProjectId = newProjectId;
 
-  // add project to project list
+  // add project to project list with a call back function to display the project when clicked
   addProjectListItem(newProjectId, name, function () {
     // display project on main content
     displayProject(newProjectId);
@@ -338,7 +336,6 @@ window.onload = () => {
       // add tasks to project
       for (const taskId of taskKeys) {
         const task = tasks[taskId];
-        console.log(task);
         addNewTask(
           task.name,
           task.description,
@@ -348,6 +345,5 @@ window.onload = () => {
         );
       }
     }
-    console.log("loaded from storage: ", storageKeys);
   }
 };
