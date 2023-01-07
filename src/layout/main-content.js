@@ -96,8 +96,13 @@ export function displayProject(projectId) {
   deleteProjectIcon.onclick = (e) => {
     projectLibrary.deleteProject(projectId);
     document.querySelector(`[data-project-id="${projectId}"]`).remove();
-    clearMain();
-    // todo - display default project
+    // display top project
+    const topProjectListItem = document.querySelector(".project-list-item");
+    if (topProjectListItem) {
+      topProjectListItem.click();
+    } else {
+      clearMain();
+    }
     e.stopPropagation();
   };
   projectTitle.append(
@@ -268,7 +273,7 @@ function handleSubmitEvent(e) {
   }
 }
 
-function createNewProject(name) {
+function createNewProject(name, wasLoaded = false) {
   const newProjectId = projectLibrary.addNewProject(name);
 
   // add project to project list with a call back function to display the project when clicked
@@ -277,15 +282,16 @@ function createNewProject(name) {
     displayProject(newProjectId);
   });
 
-  // if there is only one project, display it
-  if (
-    !!!document.querySelector(".project-list-item.active") &&
-    projectLibrary.size() === 1
-  ) {
-    const projectListItems = document.querySelectorAll(".project-list-item");
-    // execute the onclick event of the first project list item
-    projectListItems[0].dispatchEvent(new Event("click"));
+  const projectListItems = document.querySelectorAll(".project-list-item");
+  // if page was loaded selected the first list item as the default project
+  if (wasLoaded) {
+    // only execute the onclick event of the first project
+    projectListItems[0].click();
+    return;
   }
+  // execute the onclick event of the recently added project
+  projectListItems[projectListItems.length - 1].click();
+  projectListItems[projectListItems.length - 1].scrollIntoView();
 }
 
 window.onload = () => {
@@ -306,7 +312,7 @@ window.onload = () => {
 
   // create default project if there is no project in storage
   if (!!!storage || Object.entries(storage).length === 0) {
-    createNewProject("Default Project");
+    createNewProject("Default Project", true);
     addNewTask(
       "Task 1",
       "Default Task Description",
@@ -331,7 +337,7 @@ window.onload = () => {
     for (const projectId of storageKeys) {
       const project = storage[projectId]["project"];
       const tasks = storage[projectId]["tasks"];
-      createNewProject(project.name); // the currentprojectID is being set
+      createNewProject(project.name, true); // the currentprojectID is being set
       const taskKeys = Object.keys(tasks);
       // add tasks to project
       for (const taskId of taskKeys) {

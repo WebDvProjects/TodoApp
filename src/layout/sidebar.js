@@ -9,21 +9,22 @@ const sideBarTitle = document.createElement("span");
 sideBarTitle.textContent = "PROJECTS";
 // add icon
 const addIcon = document.createElement("ion-icon");
-addIcon.setAttribute("name", "add-outline");
+addIcon.id = "add-project-btn";
+addIcon.setAttribute("name", "remove-outline");
 
 export const projectEntryForm = document.createElement("form");
 projectEntryForm.classList.add("project-entry-form");
 const newProjectEntry = document.createElement("div");
-newProjectEntry.classList.add("project-entry", "hidden");
+newProjectEntry.classList.add("project-entry");
 const addProjectInput = document.createElement("input");
 addProjectInput.setAttribute("type", "text");
-addProjectInput.setAttribute("placeholder", "Project Name");
+addProjectInput.setAttribute("placeholder", "New project");
 addProjectInput.classList.add("project-name-input");
 const enterBtn = document.createElement("ion-icon");
 enterBtn.setAttribute("name", "enter-outline");
 // if enter/submit btn is clicked
 enterBtn.onclick = () => {
-  projectEntryForm.dispatchEvent(new Event("submit"));
+  projectEntryForm.submit();
 };
 
 newProjectEntry.append(addProjectInput, enterBtn);
@@ -31,9 +32,6 @@ projectEntryForm.append(newProjectEntry);
 
 // when add project button is clicked
 addIcon.onclick = () => {
-  // display project input
-  newProjectEntry.classList.toggle("hidden");
-
   // change the icon to minus icon
   if (addIcon.getAttribute("name") === "add-outline") {
     addIcon.setAttribute("name", "remove-outline");
@@ -47,9 +45,10 @@ addIcon.onclick = () => {
 sideBarTitleArea.append(sideBarTitle, addIcon);
 
 // projects list
+// const projectListWrapper = document.createElement("div");
+// projectListWrapper.classList.add("project-list-wrapper");
 const projectsList = document.createElement("ul");
 projectsList.classList.add("projects-list");
-// sample project list items todo - remove after testing
 
 sideBar.append(sideBarTitleArea, projectEntryForm, projectsList);
 
